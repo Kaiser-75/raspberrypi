@@ -1,7 +1,7 @@
 import subprocess
 import time
 
-def record_camera(device, output_file, duration=60, framerate=30, resolution="640x480"):
+def record_camera(device, output_file, duration=60, framerate=15, resolution="320x240"):
     # Build the ffmpeg command
     cmd = [
         "ffmpeg",

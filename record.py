@@ -1,41 +1,50 @@
+#!/usr/bin/python3
+import logging
 import subprocess
-import time
+import datetime
+from pathlib import Path
 
-# Define the video devices and output files
-cameras = {
-    '/dev/video0': 'camera_0.mp4',
-    '/dev/video4': 'camera_4.mp4',
-    '/dev/video8': 'camera_8.mp4',
-}
+class VideoRecorder:
+    def __init__(self):
+        self.video_processes = []
+        self.video_sec = 60
+        self.video_dir = Path(__file__).parent  # Save in the code directory
 
+    def record_video(self):
+        utc_now = datetime.datetime.utcnow()
 
-def record_videos():
-    processes = []
+        # List of camera devices to record from
+        camera_devices = ['/dev/video0', '/dev/video4', '/dev/video8']
 
-    try:
-        for device, output_file in cameras.items():
-            command = [
-                'ffmpeg',
-                '-f', 'v4l2',
-                '-video_size', '640x480',
-                '-i', device,
-                '-t', '60',  # Record for 60 seconds
-                output_file
-            ]
-            print(f'Starting recording from {device} to {output_file}...')
-            
-            processes.append(subprocess.Popen(command))
+        for index, camera in enumerate(camera_devices):
+            video_file = utc_now.strftime(f'video{index}-%Y-%m-%d-%H-%M-%S.mp4')
+            logging.info('Start recording of ' + video_file)
 
-        # Wait for all processes to finish
-        for process in processes:
-            process.wait()
+            # Record video using ffmpeg
+            process = subprocess.Popen(
+                utc_now.strftime(f'ffmpeg -an -f v4l2 '
+                + '-framerate 15 -video_size 720x480 '
+                + f'-i {camera} -codec:v h264_omx -b:v 1000k -an -t '
+                + str(self.video_sec) + ' '
+                + str(self.video_dir / video_file)).split()
+            )
+            self.video_processes.append((process, video_file))
 
-        print('record success')
+        print('Recording video from all cameras...')
+        for process, video_file in self.video_processes:
+            process.wait()  # Wait for each recording process to finish
 
-    except Exception as e:
-        print(f'Error')
-        for process in processes:
-            process.terminate()
+            if (self.video_dir / video_file).exists():
+                file_size = (self.video_dir / video_file).stat().st_size
+                logging.info('Size of recording {} is {}'.format(video_file, file_size))
+            else:
+                logging.error('Video recording failed {}'.format(video_file))
+
+    def start(self):
+        logging.info("Starting video recording...")
+        self.record_video()
 
 if __name__ == '__main__':
-    record_videos()
+    logging.basicConfig(level=logging.INFO)
+    video_recorder = VideoRecorder()
+    video_recorder.start()

@@ -19,8 +19,8 @@ def record_camera(device, output_file, duration=60, framerate=30, resolution="64
 # Define the camera devices and output files
 cameras = [
     ("/dev/video0", "cam0_output.mp4"),
-    ("/dev/video1", "cam1_output.mp4"),
-    ("/dev/video2", "cam2_output.mp4")
+    ("/dev/video4", "cam1_output.mp4"),
+    ("/dev/video8", "cam2_output.mp4")
 ]
 
 # Start recording from each camera

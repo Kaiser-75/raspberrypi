@@ -12,6 +12,8 @@ class HealthMonitor:
     def __init__(self, log_interval=5.0, check_path="/home/pi/Documents"):
         """
         Initializes the health monitor.
+        :param log_interval: Time interval (in seconds) between health checks.
+        :param check_path: Directory to monitor for storage health.
         """
         self.log_interval = log_interval
         self.check_path = check_path

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Monitors storage health on the SD card and logs relevant information.
+Monitors storage health and logs relevant information.
 """
 
 import logging
@@ -9,7 +9,7 @@ import shutil
 import time
 
 class HealthMonitor:
-    def __init__(self, log_interval=5.0, check_path="/media/pi/SDCARD"):
+    def __init__(self, log_interval=5.0, check_path="/home/pi/Documents"):
         """
         Initializes the health monitor.
         """

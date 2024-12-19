@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Monitors storage health and logs relevant information.
+Monitors storage health in the /home/pi/Documents/ directory and logs relevant information.
 """
 
 import logging

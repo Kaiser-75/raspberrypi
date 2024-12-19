@@ -4,7 +4,7 @@ import datetime
 from pathlib import Path
 
 class VideoRecorder:
-    def __init__(self, duration=60, framerate=15, resolution="720x480", base_dir="/media/pi/SDCARD/rp-video/"):
+    def __init__(self, duration=60, framerate=15, resolution="720x480", base_dir="/home/pi/Documents/"):
         """
         Initializes the video recorder with default parameters.
         """
